@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AquaGem – ร้านปลาสวยงาม</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ===================================================
+   🎨 แก้สีทั้งเว็บได้ที่นี่ที่เดียว (หรือใช้แผงสีมุมขวาล่างในหน้าเว็บ)
+   =================================================== */
+:root{
+  --primary:#0e7c86;      /* สีหลัก: ปุ่ม, หัวข้อ */
+  --primary-dark:#0a5a62; /* สีหลักเข้ม: hover */
+  --accent:#ff7a45;       /* สีเน้น: ราคา, ป้าย */
+  --bg:#f2f9fa;           /* พื้นหลังเว็บ */
+  --card:#ffffff;         /* พื้นหลังการ์ด */
+  --text:#16313a;         /* สีตัวอักษร */
+  --muted:#5f7a82;        /* ตัวอักษรรอง */
+  --header:#08323a;       /* แถบเมนูบน */
+  --danger:#d64545;       /* ปุ่มลบ */
+  --success:#1f9d62;      /* สถานะสำเร็จ */
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0}
+.container{max-width:1150px;margin:auto;padding:0 18px}
+
+/* ---------- Header ---------- */
+header{background:var(--header);color:#fff;position:sticky;top:0;z-index:50}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+.logo{font-size:1.3rem;font-weight:700}
+.nav-links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.nav-links a:hover{color:var(--accent)}
+.btn{background:var(--primary);color:#fff;padding:9px 18px;border-radius:999px;font-weight:500;transition:.2s}
+.btn:hover{background:var(--primary-dark)}
+.btn.accent{background:var(--accent)}
+.btn.ghost{background:transparent;border:1px solid #fff}
+.btn.danger{background:var(--danger)}
+.cart-btn{position:relative}
+.badge{position:absolute;top:-8px;right:-8px;background:var(--accent);border-radius:999px;font-size:.72rem;min-width:20px;height:20px;display:grid;place-items:center}
+
+/* ---------- Hero ---------- */
+.hero{background:linear-gradient(135deg,var(--primary),var(--header));color:#fff;padding:70px 0;text-align:center}
+.hero h1{font-size:2.4rem;margin-bottom:10px}
+.hero p{opacity:.9;margin-bottom:22px}
+
+/* ---------- Products ---------- */
+section{padding:46px 0}
+h2.title{font-size:1.6rem;color:var(--primary);margin-bottom:18px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.tools input,.tools select{padding:10px 14px;border:1px solid #cfe0e3;border-radius:999px;font-family:inherit;min-width:200px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.08);display:flex;flex-direction:column}
+.card .pic{height:170px;display:grid;place-items:center;font-size:4.6rem;position:relative}
+.card .tag{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.85);color:var(--text);font-size:.75rem;padding:2px 10px;border-radius:999px}
+.card .info{padding:14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.card h3{font-size:1.05rem}
+.card .th{color:var(--muted);font-size:.85rem}
+.card .desc{font-size:.85rem;color:var(--muted);flex:1}
+.card .note{font-size:.78rem;color:var(--muted);background:#f2f9fa;padding:6px 9px;border-radius:8px}
+.price{color:var(--accent);font-weight:700;font-size:1.15rem}
+.card .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+
+/* ---------- Contact ---------- */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.box{background:var(--card);padding:22px;border-radius:var(--radius);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.box p{margin:6px 0}
+form label{display:block;margin:10px 0 4px;font-size:.9rem}
+form input,form textarea{width:100%;padding:10px 12px;border:1px solid #cfe0e3;border-radius:10px;font-family:inherit}
+form button{margin-top:14px}
+footer{background:var(--header);color:#cfe3e6;text-align:center;padding:22px;font-size:.9rem}
+
+/* ---------- Modal & Drawer ---------- */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;z-index:120;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:var(--card);border-radius:var(--radius);padding:26px;width:100%;max-width:400px;max-height:92vh;overflow:auto;text-align:center}
+.modal h3{color:var(--primary);margin-bottom:12px}
+.modal form{text-align:left}
+.link{color:var(--primary);text-decoration:underline;cursor:pointer;background:none}
+#qrbox{display:flex;justify-content:center;margin:14px 0}
+#qrbox img,#qrbox canvas{border:8px solid #fff;border-radius:8px}
+.drawer{position:fixed;top:0;right:-440px;width:min(420px,100%);height:100%;background:var(--card);z-index:110;transition:.3s;display:flex;flex-direction:column;box-shadow:-6px 0 20px rgba(0,0,0,.25)}
+.drawer.open{right:0}
+.drawer .head{padding:18px;background:var(--header);color:#fff;display:flex;justify-content:space-between;align-items:center}
+.drawer .items{flex:1;overflow:auto;padding:14px}
+.item{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #e3eef0}
+.item .ico{width:54px;height:54px;border-radius:10px;display:grid;place-items:center;font-size:1.8rem}
+.item .meta{flex:1;font-size:.9rem}
+.qty{display:flex;align-items:center;gap:6px;margin-top:4px}
+.qty button{width:24px;height:24px;border-radius:50%;background:#dcecef}
+.drawer .foot{padding:18px;border-top:1px solid #e3eef0}
+.total{display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;margin-bottom:12px}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--header);color:#fff;padding:10px 22px;border-radius:999px;z-index:200;opacity:0;pointer-events:none;transition:.3s}
+.toast.show{opacity:1}
+.empty{text-align:center;color:var(--muted);padding:40px 0}
+
+/* ---------- Theme panel ---------- */
+.theme{position:fixed;bottom:16px;right:16px;z-index:90;background:var(--card);padding:10px 14px;border-radius:var(--radius);box-shadow:0 4px 14px rgba(0,0,0,.25);font-size:.8rem;display:none}
+.theme.open{display:block}
+.theme label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:4px 0}
+.theme-toggle{position:fixed;bottom:16px;right:16px;z-index:91;background:var(--accent);color:#fff;border-radius:50%;width:44px;height:44px;font-size:1.2rem}
+.theme.open{bottom:68px}
+
+@media(max-width:720px){.contact{grid-template-columns:1fr}.hero h1{font-size:1.7rem}.nav-links{gap:10px;font-size:.9rem}}
+.modal.wide{max-width:780px;text-align:left}.fld label{display:block;margin:8px 0 3px;font-size:.9rem}.fld input,.fld textarea,.fld select{width:100%;padding:10px 12px;border:1px solid #cfe0e3;border-radius:10px;font-family:inherit}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tabs button{padding:7px 16px;border-radius:999px;background:#dcecef;color:var(--text)}.tabs button.on{background:var(--primary);color:#fff}
+.tl{display:flex;justify-content:space-between;margin:10px 0 2px;font-size:.72rem;text-align:center}.tl div{flex:1;opacity:.4}.tl .on{opacity:1;color:var(--success);font-weight:700}
+.btn:disabled{cursor:not-allowed}
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header>
+  <div class="container nav">
+    <a href="#home" class="logo">🐠 AquaGem</a>
+    <nav class="nav-links">
+      <a href="#products">สินค้า</a>
+      <a href="#contact">ติดต่อเจ้าของ</a>
+      <span id="userArea"></span>
+      <button class="btn accent cart-btn" onclick="toggleCart(true)">🛒 ตะกร้า<span class="badge" id="cartCount">0</span></button>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<div class="hero" id="home">
+  <div class="container">
+    <h1>ปลาสวยงามคุณภาพ ส่งตรงจากฟาร์ม</h1>
+    <p>ปลา 40 ชนิด สุขภาพดี สีสวย ชำระเงินง่ายผ่าน QR Code</p>
+    <a href="#products" class="btn accent">เลือกซื้อปลาเลย</a>
+  </div>
+</div>
+
+<!-- ================= PRODUCTS ================= -->
+<section id="products">
+  <div class="container">
+    <h2 class="title">สินค้าและอาหารปลา</h2>
+    <div class="tools">
+      <input type="text" id="search" placeholder="🔍 ค้นหาชื่อสินค้า...">
+      <select id="filter">
+        <option value="all">ทุกประเภท</option>
+        <option value="น้ำจืด">ปลาน้ำจืด</option>
+        <option value="น้ำเค็ม">ปลาน้ำเค็ม</option>
+        <option value="อาหารปลา">อาหารปลา</option>
+      </select>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" style="background:#e4f1f3">
+  <div class="container">
+    <h2 class="title">ติดต่อเจ้าของร้าน</h2>
+    <div class="contact">
+      <div class="box">
+        <h3>ข้อมูลร้าน</h3>
+        <p>👤 เจ้าของร้าน: ณัฐวุฒิ คชเถื่อน</p>
+        <p>📞 โทร: 090-926-7154</p>
+        <p>💬 LINE: @nattawut</p>
+        <p>✉️ อีเมล: 123456789plmkkn@gmail.com</p>
+        <p>📍 124 ต.เกาะตาล กำแพงเพชร 62130</p>
+        <p>🕘 เปิดทุกวัน 09:00 – 20:00 น.</p>
+      </div>
+      <div class="box">
+        <h3>ส่งข้อความหาเรา</h3>
+        <form id="contactForm">
+          <label>ชื่อ</label><input id="cName" required>
+          <label>เบอร์โทร / อีเมล</label><input id="cContact" required>
+          <label>ข้อความ</label><textarea id="cMsg" rows="4" required></textarea>
+          <button class="btn" type="submit">ส่งข้อความ</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 AquaGem – ร้านปลาสวยงาม | สงวนลิขสิทธิ์</footer>
+
+<!-- ================= CART DRAWER ================= -->
+<aside class="drawer" id="drawer">
+  <div class="head"><strong>🛒 ตะกร้าสินค้า</strong><button class="btn ghost" onclick="toggleCart(false)">ปิด ✕</button></div>
+  <div class="items" id="cartItems"></div>
+  <div class="foot">
+    <div class="total"><span>รวมทั้งหมด</span><span id="cartTotal">฿0</span></div>
+    <button class="btn accent" style="width:100%" onclick="checkout()">ชำระเงิน</button>
+    <button class="btn danger" style="width:100%;margin-top:8px" onclick="clearCart()">ล้างตะกร้า</button>
+  </div>
+</aside>
+
+<!-- ================= LOGIN / REGISTER MODAL ================= -->
+<div class="overlay" id="authModal">
+  <div class="modal">
+    <h3 id="authTitle">เข้าสู่ระบบ</h3>
+    <p id="authNote" style="display:none;margin-bottom:10px;font-size:.88rem;color:var(--accent)">🛒 เข้าสู่ระบบหรือสมัครสมาชิกก่อน ระบบจะพาไปหน้าชำระเงินให้ทันที ตะกร้าของคุณยังอยู่ครบ</p>
+    <form id="authForm">
+      <div id="nameWrap" style="display:none"><label>ชื่อ-นามสกุล</label><input id="aName"></div>
+      <label>อีเมล</label><input type="email" id="aEmail" required>
+      <label>รหัสผ่าน (อย่างน้อย 6 ตัว)</label><input type="password" id="aPass" minlength="6" required>
+      <button class="btn" style="width:100%" type="submit" id="authBtn">เข้าสู่ระบบ</button>
+    </form>
+    <p style="margin-top:12px;font-size:.9rem"><span id="authSwitchText">ยังไม่มีบัญชี?</span> <button class="link" onclick="switchAuth()" id="authSwitch">สมัครสมาชิก</button></p>
+    <button class="link" style="margin-top:8px" onclick="closeModal('authModal')">ยกเลิก</button>
+  </div>
+</div>
+
+<!-- ================= PAYMENT (QR) MODAL ================= -->
+<div class="overlay" id="payModal">
+  <div class="modal">
+    <h3>ชำระเงินผ่าน QR Code</h3>
+    <p>ยอดชำระ: <strong class="price" id="payAmount"></strong></p>
+    <div id="qrbox"></div>
+    <p style="font-size:.85rem;color:var(--muted)" id="payInfo"></p>
+    <div class="fld" style="text-align:left"><label>ชื่อผู้รับ</label><input id="pName"><label>เบอร์โทร</label><input id="pPhone" inputmode="tel" placeholder="0xxxxxxxxx"><label>ที่อยู่จัดส่ง</label><textarea id="pAddr" rows="2"></textarea></div>
+    <button class="btn" id="payBtn" style="width:100%;margin-top:14px;background:var(--success)" onclick="confirmPay()">✅ ฉันโอนเงินแล้ว</button>
+    <button class="link" style="margin-top:10px" onclick="closeModal('payModal')">ยกเลิก</button>
+  </div>
+</div>
+
+<div class="overlay" id="panelModal"><div class="modal wide"><h3 id="panelTitle"></h3><div id="panelBody"></div><button class="link" style="margin-top:12px" onclick="closeModal('panelModal')">ปิด</button></div></div>
+
+<!-- ================= THEME PANEL ================= -->
+<button class="theme-toggle" title="เปลี่ยนสีเว็บ" onclick="document.getElementById('theme').classList.toggle('open')">🎨</button>
+<div class="theme" id="theme"></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ===================================================
+   ⚙️ ตั้งค่า (แก้ 3 ส่วนนี้ให้เป็นของร้านจริง)
+   =================================================== */
+const SB_URL='ใส่_PROJECT_URL_ที่นี่';
+const SB_KEY='ใส่_PUBLISHABLE_KEY_ที่นี่';
+const SHOP={
+  promptPayId:"0812345678",   // เบอร์พร้อมเพย์ (10 หลัก) หรือเลขบัตร ปชช. 13 หลัก ของร้าน
+  qrImage:"",                  // ถ้ามีรูป QR จริง ใส่ชื่อไฟล์ เช่น "qr.png" (ยอดเงินจะไม่ถูกใส่อัตโนมัติ)
+  accountName:"นายสมชาย ใจดี"  // ชื่อบัญชีที่แสดงให้ลูกค้าเห็น
+};
+const STS=['รอตรวจสอบยอดโอน','กำลังเตรียมปลา','จัดส่งแล้ว','สำเร็จ'];
+
+const $=id=>document.getElementById(id);
+const baht=n=>"฿"+Number(n).toLocaleString("th-TH");
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const memStore={};
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v===null?(k in memStore?memStore[k]:d):JSON.parse(v)}catch{return(k in memStore)?memStore[k]:d}},
+  set(k,v){memStore[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch{}},
+  del(k){delete memStore[k];try{localStorage.removeItem(k)}catch{}}
+};
+const ready=!/ใส่_/.test(SB_URL);
+const sb=ready?supabase.createClient(SB_URL,SB_KEY):null;
+let FISH=[],cart=store.get("cart",[]),user=null,isAdm=false,authMode="login",AT="o",eid=0;
+const prod=id=>FISH.find(p=>p.id===id);
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
+function openModal(id){$(id).classList.add("open")}
+function closeModal(id){$(id).classList.remove("open")}
+
+/* ---------- สินค้า ---------- */
+function fishImage(p){
+  const fb=`<span style="font-size:4rem">${esc(p.icon||'🐟')}</span>`;
+  if(!p.image_url)return fb;
+  return `<img src="${esc(p.image_url)}" alt="${esc(p.name)}" style="width:140px;height:110px;object-fit:cover;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.15);display:block" onerror="this.outerHTML=this.dataset.fb" data-fb="${esc(fb)}">`;
+}
+async function loadP(){
+  if(!ready){$("grid").innerHTML='<div class="empty">ยังไม่ได้ตั้งค่า Supabase (แก้ SB_URL และ SB_KEY ในไฟล์ index.html)</div>';return}
+  const {data,error}=await sb.from("products").select("*").order("id");
+  if(error){$("grid").innerHTML=`<div class="empty">โหลดสินค้าไม่ได้: ${esc(error.message)}<br>ตรวจว่ารัน setup.sql แล้ว</div>`;return}
+  FISH=data;cart=cart.filter(c=>prod(c.id));renderProducts();renderCart();
+}
+function renderProducts(){
+  const q=$("search").value.trim().toLowerCase(),f=$("filter").value;
+  const list=FISH.filter(p=>(f==="all"||p.type===f)&&(p.name+(p.th||"")).toLowerCase().includes(q));
+  $("grid").innerHTML=list.length?list.map(p=>`
+    <div class="card"><div class="pic" style="background:linear-gradient(135deg,${esc(p.c1)},${esc(p.c2)})"><span class="tag">${esc(p.type)}</span>${fishImage(p)}</div>
+    <div class="info"><h3>${esc(p.name)}</h3><div class="th">${esc(p.th)}</div><div class="desc">${esc(p.description)}</div>
+    ${p.type==="อาหารปลา"?`<div class="note">โปรดสอบถามขนาดบรรจุก่อนสั่งซื้อ</div>`:""}
+    <div class="row"><span class="price">${baht(p.price)}</span>${p.stock>0?`<button class="btn" onclick="addToCart(${p.id})">+ ใส่ตะกร้า</button>`:`<button class="btn" disabled style="opacity:.5">สินค้าหมด</button>`}</div>
+    <div class="th">${p.stock>0&&p.stock<=5?`เหลือ ${p.stock} ตัว`:""}</div></div></div>`).join(""):`<div class="empty">ไม่พบสินค้าที่ค้นหา ลองพิมพ์คำอื่น</div>`;
+}
+
+/* ---------- ตะกร้า ---------- */
+function addToCart(id){const p=prod(id),it=cart.find(c=>c.id===id);
+  if((it?it.qty:0)>=p.stock)return toast("สินค้าในสต็อกมีไม่พอ");
+  it?it.qty++:cart.push({id,qty:1});saveCart();toast("เพิ่มลงตะกร้าแล้ว 🐟")}
+function changeQty(id,d){const it=cart.find(c=>c.id===id);if(!it)return;const p=prod(id);
+  if(d>0&&it.qty>=p.stock)return toast("สินค้าในสต็อกมีไม่พอ");
+  it.qty+=d;if(it.qty<=0)cart=cart.filter(c=>c.id!==id);saveCart()}
+function removeItem(id){cart=cart.filter(c=>c.id!==id);saveCart()}
+function clearCart(){if(cart.length&&confirm("ล้างตะกร้าทั้งหมด?")){cart=[];saveCart()}}
+function cartTotal(){return cart.reduce((s,c)=>s+prod(c.id).price*c.qty,0)}
+function saveCart(){store.set("cart",cart);renderCart()}
+function toggleCart(o){$("drawer").classList.toggle("open",o)}
+function renderCart(){
+  $("cartCount").textContent=cart.reduce((s,c)=>s+c.qty,0);$("cartTotal").textContent=baht(cartTotal());
+  $("cartItems").innerHTML=cart.length?cart.map(c=>{const p=prod(c.id);return `<div class="item"><div class="ico" style="background:linear-gradient(135deg,${esc(p.c1)},${esc(p.c2)})">${esc(p.icon)}</div>
+  <div class="meta"><strong>${esc(p.name)}</strong><br>${baht(p.price)}<div class="qty"><button onclick="changeQty(${p.id},-1)">−</button>${c.qty}<button onclick="changeQty(${p.id},1)">+</button></div></div>
+  <button class="btn danger" onclick="removeItem(${p.id})">ลบ</button></div>`}).join(""):`<div class="empty">ตะกร้ายังว่าง<br>เลือกปลาที่ชอบได้เลย 🐠</div>`;
+}
+
+/* ---------- สมาชิก ---------- */
+async function setUser(u){
+  user=null;isAdm=false;
+  if(u&&sb){const {data}=await sb.from("profiles").select("name,is_admin").eq("id",u.id).maybeSingle();
+    user={id:u.id,email:u.email,name:(data&&data.name)||u.email};isAdm=!!(data&&data.is_admin)}
+  renderUser();
+}
+function renderUser(){
+  $("userArea").innerHTML=user?`👤 ${esc(user.name)} <button class="btn ghost" onclick="openOrders()">ออเดอร์ของฉัน</button>${isAdm?` <button class="btn accent" onclick="openAdmin()">⚙️ จัดการร้าน</button>`:""} <button class="btn ghost" onclick="logout()">ออกจากระบบ</button>`:`<button class="btn" onclick="openAuth('login')">เข้าสู่ระบบ</button>`;
+}
+if(sb){sb.auth.onAuthStateChange((e,s)=>setTimeout(()=>setUser(s&&s.user),0));sb.auth.getSession().then(({data})=>setUser(data.session&&data.session.user))}
+function openAuth(m){window._pc=false;$("authNote").style.display="none";authMode=m;updateAuthUI();openModal("authModal")}
+function switchAuth(){authMode=authMode==="login"?"register":"login";updateAuthUI()}
+function updateAuthUI(){const r=authMode==="register";
+  $("authTitle").textContent=$("authBtn").textContent=r?"สมัครสมาชิก":"เข้าสู่ระบบ";
+  $("authSwitchText").textContent=r?"มีบัญชีแล้ว?":"ยังไม่มีบัญชี?";$("authSwitch").textContent=r?"เข้าสู่ระบบ":"สมัครสมาชิก";
+  $("nameWrap").style.display=r?"block":"none";$("aName").required=r}
+$("authForm").addEventListener("submit",async e=>{
+  e.preventDefault();if(!sb)return toast("ยังไม่ได้ตั้งค่า Supabase");
+  const email=$("aEmail").value.trim(),pw=$("aPass").value,btn=$("authBtn");btn.disabled=true;
+  const r=authMode==="register"?await sb.auth.signUp({email,password:pw,options:{data:{name:$("aName").value.trim()}}}):await sb.auth.signInWithPassword({email,password:pw});
+  btn.disabled=false;
+  if(r.error)return toast(r.error.message.includes("Invalid login")?"อีเมลหรือรหัสผ่านไม่ถูกต้อง":r.error.message);
+  if(!r.data.session)return toast("สมัครสำเร็จ กรุณายืนยันอีเมลแล้วเข้าสู่ระบบ");
+  await setUser(r.data.user);toast("ยินดีต้อนรับ "+user.name);closeModal("authModal");e.target.reset();
+  if(window._pc){window._pc=false;checkout()}
+});
+async function logout(){await sb.auth.signOut();toast("ออกจากระบบแล้ว")}
+
+/* ---------- ชำระเงิน QR ---------- */
+function crc16(s){let c=0xFFFF;for(let i=0;i<s.length;i++){c^=s.charCodeAt(i)<<8;for(let j=0;j<8;j++)c=(c&0x8000)?((c<<1)^0x1021):(c<<1);c&=0xFFFF}return c.toString(16).toUpperCase().padStart(4,"0")}
+function tlv(id,v){return id+String(v.length).padStart(2,"0")+v}
+function promptPayPayload(id,amount){let t=id.replace(/\D/g,"");const ph=t.length<=10;if(ph)t="0066"+t.replace(/^0/,"");
+  const acc=tlv("00","A000000677010111")+tlv(ph?"01":"02",t);
+  const p=tlv("00","01")+tlv("01","12")+tlv("29",acc)+tlv("53","764")+tlv("54",amount.toFixed(2))+tlv("58","TH")+"6304";return p+crc16(p)}
+function checkout(){
+  if(!cart.length)return toast("ตะกร้ายังว่างอยู่");
+  if(!user){toggleCart(false);openAuth("login");window._pc=true;$("authNote").style.display="block";return}
+  const total=cartTotal();$("payAmount").textContent=baht(total);
+  $("payInfo").textContent="สแกนด้วยแอปธนาคาร | ชื่อบัญชี: "+SHOP.accountName;
+  if(!$("pName").value)$("pName").value=user.name;
+  const box=$("qrbox");box.innerHTML="";
+  if(SHOP.qrImage)box.innerHTML=`<img src="${SHOP.qrImage}" width="220" alt="QR">`;
+  else if(window.QRCode)new QRCode(box,{text:promptPayPayload(SHOP.promptPayId,total),width:220,height:220});
+  else box.innerHTML=`<p style="color:var(--danger)">โหลดไลบรารี QR ไม่ได้ (ตรวจสอบอินเทอร์เน็ต)</p>`;
+  toggleCart(false);openModal("payModal");
+}
+async function confirmPay(){
+  const nm=$("pName").value.trim(),ph=$("pPhone").value.replace(/[-\s]/g,""),ad=$("pAddr").value.trim();
+  if(!nm||!/^0\d{8,9}$/.test(ph)||ad.length<10)return toast("กรอกชื่อ เบอร์โทร (0xxxxxxxxx) และที่อยู่ให้ครบ");
+  const b=$("payBtn");b.disabled=true;b.textContent="กำลังบันทึกออเดอร์…";
+  const {data,error}=await sb.rpc("place_order",{p_name:nm,p_phone:ph,p_address:ad,p_payment:"พร้อมเพย์ QR",p_items:cart.map(c=>({id:c.id,qty:c.qty}))});
+  b.disabled=false;b.textContent="✅ ฉันโอนเงินแล้ว";
+  if(error){toast(error.message);await loadP();return}
+  cart=[];saveCart();closeModal("payModal");await loadP();
+  alert(`ขอบคุณที่สั่งซื้อ! 🎉\nเลขที่คำสั่งซื้อ ${data.order_no}\nยอด ${baht(data.total)}\nทางร้านจะตรวจสอบยอดโอนและติดต่อกลับ`);
+}
+
+/* ---------- ออเดอร์ของฉัน ---------- */
+const tlH=s=>`<div class="tl">${STS.map((x,i)=>`<div class="${i<=s?'on':''}">${i<=s?'●':'○'}<br>${x}</div>`).join("")}</div>`;
+async function openPanel(t,html){$("panelTitle").textContent=t;$("panelBody").innerHTML=html;openModal("panelModal")}
+async function openOrders(){
+  openPanel("ออเดอร์ของฉัน","กำลังโหลด…");
+  const {data,error}=await sb.from("orders").select("*,order_items(*)").order("id",{ascending:false});
+  $("panelBody").innerHTML=error?esc(error.message):(data.map(o=>`<div class="box"><b>${o.order_no}</b> · ${baht(o.total)}<br><small>${new Date(o.created_at).toLocaleString("th-TH")}<br>${o.order_items.map(x=>esc(x.name)+"×"+x.qty).join(", ")}</small>${tlH(o.status)}</div>`).join("")||"<p>ยังไม่มีออเดอร์</p>");
+}
+
+/* ---------- หลังบ้านเจ้าของร้าน ---------- */
+function openAdmin(){openPanel("จัดการร้าน","");renderAdmin()}
+function setTab(t){AT=t;eid=0;renderAdmin()}
+async function renderAdmin(){
+  const tabs=`<div class="tabs">${[["o","ออเดอร์"],["p","สินค้า"],["m","ข้อความ"],["s","ยอดขาย"]].map(t=>`<button class="${AT===t[0]?'on':''}" onclick="setTab('${t[0]}')">${t[1]}</button>`).join("")}</div>`;
+  const B=$("panelBody");B.innerHTML=tabs+"กำลังโหลด…";
+  if(AT==="p"){const e=prod(eid)||{name:"",th:"",type:"น้ำจืด",price:"",stock:10,image_url:"",description:""};
+    B.innerHTML=tabs+`<div class="box fld"><b>${eid?"แก้ไขสินค้า":"เพิ่มสินค้าใหม่"}</b><label>ชื่อ</label><input id="an" value="${esc(e.name)}"><label>ชื่อไทย/คำอธิบายสั้น</label><input id="ath" value="${esc(e.th)}">
+    <label>ประเภท</label><select id="at">${["น้ำจืด","น้ำเค็ม","อาหารปลา"].map(x=>`<option ${x===e.type?"selected":""}>${x}</option>`).join("")}</select>
+    <label>ราคา</label><input id="ap" type="number" value="${e.price}"><label>สต็อก</label><input id="as" type="number" value="${e.stock}">
+    <label>รูปสินค้า (เลือกไฟล์จากเครื่อง ไม่เกิน 3MB)</label><input id="af" type="file" accept="image/*">${e.image_url?`<div style="margin-top:6px"><img src="${esc(e.image_url)}" alt="" style="height:60px;border-radius:8px"> <small>รูปปัจจุบัน (ไม่เลือกไฟล์ใหม่ = ใช้รูปเดิม)</small></div>`:""}<label>หรือวางชื่อไฟล์ใน imges/ / ลิงก์ https</label><input id="ai" value="${esc(e.image_url||"")}"><label>รายละเอียด</label><input id="ad" value="${esc(e.description)}">
+    <div style="margin-top:10px"><button class="btn" id="saveBtn" onclick="saveProd()">บันทึก</button> ${eid?`<button class="btn ghost" style="color:var(--text);border-color:#999" onclick="setTab('p')">ยกเลิก</button>`:""}</div></div>`+
+    FISH.map(p=>`<div class="item"><div class="meta"><strong>${esc(p.name)}</strong><br>${baht(p.price)} · สต็อก ${p.stock}</div><button class="btn" onclick="eid=${p.id};renderAdmin()">แก้ไข</button> <button class="btn danger" onclick="delProd(${p.id})">ลบ</button></div>`).join("");return}
+  if(AT==="m"){const {data,error}=await sb.from("messages").select("*").order("id",{ascending:false});
+    B.innerHTML=tabs+(error?esc(error.message):data.map(m=>`<div class="box"><b>${esc(m.name)}</b> · ${esc(m.contact)}<br>${esc(m.message)}<br><small>${new Date(m.created_at).toLocaleString("th-TH")}</small> <button class="link" onclick="delMsg(${m.id})">ลบ</button></div>`).join("")||"<p>ยังไม่มีข้อความ</p>");return}
+  const {data,error}=await sb.from("orders").select("*,order_items(*)").order("id",{ascending:false});
+  if(error){B.innerHTML=tabs+esc(error.message);return}
+  if(AT==="s"){const t=data.reduce((a,o)=>a+Number(o.total),0);
+    B.innerHTML=tabs+`<div class="box"><p>จำนวนออเดอร์: <b>${data.length}</b></p><p>ยอดขายรวม: <b>${baht(t)}</b></p><p>รอตรวจสอบยอดโอน: <b>${data.filter(o=>o.status===0).length}</b></p><p>สินค้าใกล้หมด (≤5): <b>${FISH.filter(p=>p.stock<=5).length}</b></p></div>`;return}
+  B.innerHTML=tabs+(data.map(o=>`<div class="box"><b>${o.order_no}</b> · ${esc(o.name)} · ${esc(o.phone)}<br>${baht(o.total)}<br><small>${esc(o.address)}<br>${o.order_items.map(x=>esc(x.name)+"×"+x.qty).join(", ")}</small><br>สถานะ: <b>${STS[o.status]}</b> ${o.status<3?`<button class="btn" onclick="setStatus(${o.id},${o.status+1})">→ ${STS[o.status+1]}</button>`:""}</div>`).join("")||"<p>ยังไม่มีออเดอร์</p>");
+}
+async function setStatus(id,v){const {error}=await sb.from("orders").update({status:v}).eq("id",id);if(error)toast(error.message);renderAdmin()}
+async function delMsg(id){const {error}=await sb.from("messages").delete().eq("id",id);if(error)toast(error.message);renderAdmin()}
+async function delProd(id){if(!confirm("ลบสินค้านี้?"))return;const {error}=await sb.from("products").delete().eq("id",id);if(error)toast(error.message);await loadP();renderAdmin()}
+async function saveProd(){
+  const n=$("an").value.trim(),pr=+$("ap").value,st=parseInt($("as").value);
+  if(!n||!(pr>0)||!(st>=0))return toast("กรอกชื่อ ราคา สต็อกให้ถูกต้อง");
+  let img=$("ai").value.trim()||null;const fl=$("af").files[0];
+  if(fl){
+    if(fl.size>3e6)return toast("รูปใหญ่เกิน 3MB");
+    if(!fl.type.startsWith("image/"))return toast("ต้องเป็นไฟล์รูปภาพเท่านั้น");
+    const ext=(fl.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"")||"jpg";
+    const path=Date.now()+"-"+Math.random().toString(36).slice(2,7)+"."+ext,sbn=$("saveBtn");
+    sbn.disabled=true;sbn.textContent="กำลังอัปโหลดรูป…";
+    const up=await sb.storage.from("products").upload(path,fl,{contentType:fl.type});
+    sbn.disabled=false;sbn.textContent="บันทึก";
+    if(up.error)return toast("อัปโหลดรูปไม่ได้: "+up.error.message);
+    img=sb.storage.from("products").getPublicUrl(path).data.publicUrl;
+  }
+  const o={name:n,th:$("ath").value.trim(),type:$("at").value,price:pr,stock:st,image_url:img,description:$("ad").value.trim()};
+  const {error}=eid?await sb.from("products").update(o).eq("id",eid):await sb.from("products").insert(o);
+  if(error)return toast(error.message);eid=0;toast("บันทึกแล้ว");await loadP();renderAdmin();
+}
+
+/* ---------- ติดต่อเจ้าของ ---------- */
+$("contactForm").addEventListener("submit",async e=>{
+  e.preventDefault();if(!sb)return toast("ยังไม่ได้ตั้งค่า Supabase");
+  const {error}=await sb.from("messages").insert({name:$("cName").value.trim(),contact:$("cContact").value.trim(),message:$("cMsg").value.trim()});
+  if(error)return toast("ส่งไม่สำเร็จ: "+error.message);e.target.reset();toast("ส่งข้อความถึงเจ้าของร้านแล้ว ✉️");
+});
+
+/* ---------- แผงเปลี่ยนสี ---------- */
+const THEME_VARS={"--primary":"สีหลัก","--accent":"สีเน้น","--bg":"พื้นหลัง","--header":"แถบเมนู","--text":"ตัวอักษร"};
+(function(){const saved=store.get("theme",{}),root=document.documentElement,cs=getComputedStyle(root);
+  $("theme").innerHTML=Object.entries(THEME_VARS).map(([v,l])=>{if(saved[v])root.style.setProperty(v,saved[v]);
+    return `<label>${l}<input type="color" value="${saved[v]||cs.getPropertyValue(v).trim()}" data-var="${v}"></label>`}).join("")+`<button class="link" onclick="store.del('theme');location.reload()">รีเซ็ตสี</button>`;
+  $("theme").addEventListener("input",e=>{const v=e.target.dataset.var;if(!v)return;root.style.setProperty(v,e.target.value);saved[v]=e.target.value;store.set("theme",saved)})})();
+
+$("search").addEventListener("input",renderProducts);$("filter").addEventListener("change",renderProducts);
+$("search").value="";$("filter").value="all";renderUser();renderCart();loadP();
+</script>
+</body>
+</html>
