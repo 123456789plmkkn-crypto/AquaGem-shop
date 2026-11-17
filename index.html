@@ -234,8 +234,8 @@ footer{background:var(--header);color:#cfe3e6;text-align:center;padding:22px;fon
 /* ===================================================
    ⚙️ ตั้งค่า (แก้ 3 ส่วนนี้ให้เป็นของร้านจริง)
    =================================================== */
-const SB_URL='ใส่_PROJECT_URL_ที่นี่';
-const SB_KEY='ใส่_PUBLISHABLE_KEY_ที่นี่';
+const SB_URL='https://dzhagbxrczygcihcpcma.supabase.co';
+const SB_KEY='sb_publishable_WZxgmUTMUf4amxDuhXDDNA_cCxKmJgc';
 const SHOP={
   promptPayId:"0812345678",   // เบอร์พร้อมเพย์ (10 หลัก) หรือเลขบัตร ปชช. 13 หลัก ของร้าน
   qrImage:"",                  // ถ้ามีรูป QR จริง ใส่ชื่อไฟล์ เช่น "qr.png" (ยอดเงินจะไม่ถูกใส่อัตโนมัติ)
@@ -428,7 +428,7 @@ const THEME_VARS={"--primary":"สีหลัก","--accent":"สีเน้�
   $("theme").addEventListener("input",e=>{const v=e.target.dataset.var;if(!v)return;root.style.setProperty(v,e.target.value);saved[v]=e.target.value;store.set("theme",saved)})})();
 
 $("search").addEventListener("input",renderProducts);$("filter").addEventListener("change",renderProducts);
-$("search").value="";$("filter").value="all";renderUser();renderCart();loadP();
+$("search").value="";$("filter").value="all";renderUser();loadP();
 </script>
 </body>
 </html>
